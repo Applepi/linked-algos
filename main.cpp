@@ -101,4 +101,14 @@ int main () {
 
     list.clean();
     std::cout << "The list after clean(): " << list << '\n';
+    int num = 0;
+    std::cout << "Please enter a list of numbers delimited by whitespace (-1 to end): " << '\n';
+    while ( std::cin >> num){
+        if ( num != -1){
+            list.push(num);
+        }  
+        else
+            break;
+    }
+    std::cout << "LIST: " << list << std::endl;
 }
