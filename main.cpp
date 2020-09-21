@@ -43,6 +43,18 @@ struct List {
             head = std::move(temp);
         }
     }
+
+    void reverse(){
+        List<T> temp;
+        Node<T> *root = head.get();
+        while (root){
+            temp.push(root->data);
+            root = root->next.get();
+        }
+        clean();
+        head = std::move(temp.head);
+    }
+
     void pop(){
         if(head == nullptr){
             return;
@@ -50,6 +62,7 @@ struct List {
         std::unique_ptr< Node<T> > temp = std::move(head);
         head = std::move(temp->next);
     }
+
     ~List(){
         clean();
     }
@@ -65,6 +78,9 @@ int main () {
         list.push(i);
     }
     std::cout << "The list with 10 nodes: " << list << '\n';
+    list.reverse();
+    std::cout << "The list with 10 nodes reversed: " << list << '\n';
+    list.reverse();
     for (int i = 0; i< 5; i++ )
     {
         list.pop();
