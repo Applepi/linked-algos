@@ -44,6 +44,18 @@ struct List {
         }
     }
 
+    void insertAfter(Node<T> prev_node, T new_data){
+        if (prev_node == NULL)
+        {
+            std::cout << "the given previous node cannot be NULL\n";
+            return;
+        }
+        std::unique_ptr< Node<T> >new_node = std::make_unique< Node<T> >;
+        new_node->data = new_data;
+        new_node->next = prev_node->next;
+        prev_node->next = new_node;
+    }
+
     void reverse(){
         List<T> temp;
         Node<T> *root = head.get();
