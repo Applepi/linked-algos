@@ -5,7 +5,7 @@
 template <typename T>
 struct Node {
     T data;
-    std::unique_ptr<Node> next = std::make_unique<Node>;
+    std::unique_ptr<Node> next = std::make_unique<Node>(NULL);
     Node(T data) : data(data), next(nullptr){};
 
     ~Node(){
@@ -74,6 +74,16 @@ struct List {
         std::unique_ptr< Node<T> > temp = std::move(head);
         head = std::move(temp->next);
     }
+    
+    int size(){
+        int count = 0;
+        Node<T> *temp = head.get();
+        while(temp){
+            count++;
+            temp = temp->next.get();
+        }
+        return count;
+    }
 
     ~List(){
         clean();
@@ -85,14 +95,17 @@ private:
 int main () {
     List<int> list;
     std::cout << "The list is empty: " << list << '\n';
+    
     for (int i = 0; i< 10; i++ )
     {
         list.push(i);
     }
     std::cout << "The list with 10 nodes: " << list << '\n';
+    
     list.reverse();
     std::cout << "The list with 10 nodes reversed: " << list << '\n';
     list.reverse();
+
     for (int i = 0; i< 5; i++ )
     {
         list.pop();
@@ -101,6 +114,7 @@ int main () {
 
     list.clean();
     std::cout << "The list after clean(): " << list << '\n';
+    
     int num = 0;
     std::cout << "Please enter a list of numbers delimited by whitespace (-1 to end): " << '\n';
     while ( std::cin >> num){
@@ -110,5 +124,6 @@ int main () {
         else
             break;
     }
-    std::cout << "LIST: " << list << std::endl;
+    
+    std::cout << "LIST: " << list << "size: " << list.size()<< std::endl;
 }
