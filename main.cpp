@@ -20,7 +20,7 @@ struct List {
     void push(T data){
         auto temp{std::make_unique< Node<T> >(data)};
         if(head){
-            temp->next -> std::move(head);
+            temp->next = std::move(head);
             head = std::move(temp);
         } else {
             head == std::move(temp);
