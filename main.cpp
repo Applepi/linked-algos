@@ -10,28 +10,48 @@ struct Node {
 
     ~Node(){
         // output on delete
-        std::cout << "Destroy node with data: " << data << std::endl; 
+        // std::cout << "Destroy node with data: " << data << std::endl; 
     }
 };
 
 template <typename T>
 struct List {
     List() : head{nullptr} {};
+
+    friend std::ostream& operator<<(std::ostream &os, const List<T> &list)
+    {
+        Node<T> *head = list.head.get();
+        while(head){
+            os << head->data << ' ';
+            head = head->next.get();
+        }
+        return os;
+    }
+
+    void clean(){
+        while(head){
+            head = std::move(head->next);
+        }
+    }
+
     void push(T data){
         auto temp{std::make_unique< Node<T> >(data)};
         if(head){
             temp->next = std::move(head);
             head = std::move(temp);
         } else {
-            head == std::move(temp);
+            head = std::move(temp);
         }
     }
     void pop(){
-
+        if(head == nullptr){
+            return;
+        }
+        std::unique_ptr< Node<T> > temp = std::move(head);
+        head = std::move(temp->next);
     }
     ~List(){
-        // output on delete
-        std::cout << "Destroyed list" << std::endl; 
+        clean();
     }
 private:
     std::unique_ptr< Node<T> > head = std::make_unique< Node<T> >;
@@ -39,8 +59,18 @@ private:
 
 int main () {
     List<int> list;
-    list.push(0);
-    list.push(1);
-    list.push(2);
-    list.push(3);
+    std::cout << "The list is empty: " << list << '\n';
+    for (int i = 0; i< 10; i++ )
+    {
+        list.push(i);
+    }
+    std::cout << "The list with 10 nodes: " << list << '\n';
+    for (int i = 0; i< 5; i++ )
+    {
+        list.pop();
+    }
+    std::cout << "The list with 5 nodes: " << list << '\n';
+
+    list.clean();
+    std::cout << "The list after clean(): " << list << '\n';
 }
