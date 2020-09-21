@@ -5,7 +5,7 @@
 template <typename T>
 struct Node {
     T data;
-    std::unique_ptr<Node> next;
+    std::unique_ptr<Node> next = std::make_unique<Node>;
     Node(T data) : data(data), next(nullptr){};
     ~Node(){
         // output on delete
