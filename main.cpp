@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 
-template <typename T>
+template <typename T = int>
 struct Node {
     T data;
     std::unique_ptr<Node> next = std::make_unique<Node>(NULL);
@@ -14,7 +14,7 @@ struct Node {
     }
 };
 
-template <typename T>
+template <typename T = int>
 struct List {
     List() : head{nullptr} {};
 
@@ -35,7 +35,9 @@ struct List {
     }
 
     void push(T data){
-        auto temp{std::make_unique< Node<T> >(data)};
+        auto temp{
+            std::make_unique< Node<T> >(data)
+        };
         if(head){
             temp->next = std::move(head);
             head = std::move(temp);
@@ -75,7 +77,7 @@ struct List {
         head = std::move(temp->next);
     }
     
-    int size(){
+    int size(){ // Needs work
         int count = 0;
         Node<T> *temp = head.get();
         while(temp){
@@ -85,6 +87,19 @@ struct List {
         return count;
     }
 
+    void search(T data ){
+        Node<T> *temp = head.get();
+        while(temp){
+            if ( temp->data == data){
+                std::cout << "Data " << data << " was found.\n";
+                return;
+            }else{
+                temp = temp->next.get();
+            }
+        }
+        std::cout << "Data " << data << " was not found.\n";
+        return;
+    };
     ~List(){
         clean();
     }
@@ -105,6 +120,8 @@ int main () {
     list.reverse();
     std::cout << "The list with 10 nodes reversed: " << list << '\n';
     list.reverse();
+    
+    list.search(5);
 
     for (int i = 0; i< 5; i++ )
     {
